@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import Icon from '@/components/ui/icon';
 import GlassSidebar from '@/components/GlassSidebar';
+import LoginPage from '@/components/LoginPage';
 
 interface Product {
   id: number;
@@ -104,9 +105,20 @@ const products: Product[] = [
 ];
 
 const Index = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState('');
   const [cart, setCart] = useState<CartItem[]>([]);
   const [activeSection, setActiveSection] = useState('home');
   const [selectedCategory, setSelectedCategory] = useState<string>('Все');
+
+  const handleLogin = (username: string) => {
+    setCurrentUser(username);
+    setIsLoggedIn(true);
+  };
+
+  if (!isLoggedIn) {
+    return <LoginPage onLogin={handleLogin} />;
+  }
 
   const categories = ['Все', ...Array.from(new Set(products.map(p => p.category)))];
   const filteredProducts = selectedCategory === 'Все' 
@@ -158,7 +170,7 @@ const Index = () => {
           menuItems={menuItems}
           activeItem={activeSection}
           onItemClick={setActiveSection}
-          userName="TechStore Admin"
+          userName={currentUser || 'TechStore Admin'}
           userRole="Менеджер"
         />
 
