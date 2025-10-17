@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import Icon from '@/components/ui/icon';
+import GlassSidebar from '@/components/GlassSidebar';
 
 interface Product {
   id: number;
@@ -141,48 +142,44 @@ const Index = () => {
   const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const cartItemsCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
+  const menuItems = [
+    { id: 'home', label: 'Главная', icon: 'Home' },
+    { id: 'catalog', label: 'Каталог', icon: 'Grid3x3' },
+    { id: 'about', label: 'О магазине', icon: 'Info' },
+    { id: 'delivery', label: 'Доставка', icon: 'Truck' },
+    { id: 'contacts', label: 'Контакты', icon: 'Mail' },
+  ];
+
   return (
-    <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-50 border-b bg-card/95 backdrop-blur">
-        <div className="container mx-auto px-4">
-          <div className="flex h-16 items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Icon name="Laptop" size={28} className="text-primary" />
-              <span className="text-xl font-bold text-foreground">TechStore</span>
-            </div>
+    <div className="min-h-screen bg-gradient-to-br from-[#2a2a72] via-[#1a4a7a] to-[#009ffd] flex items-center justify-center p-4">
+      <div className="w-[90%] h-[85vh] bg-white/8 backdrop-blur-[30px] rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.1)] border border-white/18 overflow-hidden flex">
+        <GlassSidebar
+          menuItems={menuItems}
+          activeItem={activeSection}
+          onItemClick={setActiveSection}
+          userName="TechStore Admin"
+          userRole="Менеджер"
+        />
 
-            <nav className="hidden md:flex items-center gap-6">
-              {[
-                { id: 'home', label: 'Главная', icon: 'Home' },
-                { id: 'catalog', label: 'Каталог', icon: 'Grid3x3' },
-                { id: 'about', label: 'О магазине', icon: 'Info' },
-                { id: 'delivery', label: 'Доставка', icon: 'Truck' },
-                { id: 'contacts', label: 'Контакты', icon: 'Mail' },
-              ].map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => setActiveSection(item.id)}
-                  className={`flex items-center gap-1.5 text-sm font-medium transition-colors ${
-                    activeSection === item.id ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
-                  }`}
-                >
-                  <Icon name={item.icon} size={16} />
-                  {item.label}
-                </button>
-              ))}
-            </nav>
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <header className="flex-shrink-0 border-b border-white/8 bg-white/5 backdrop-blur">
+            <div className="px-8 py-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Icon name="Laptop" size={32} className="text-white" />
+                <span className="text-2xl font-bold text-white">TechStore</span>
+              </div>
 
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="outline" size="icon" className="relative">
-                  <Icon name="ShoppingCart" size={20} />
-                  {cartItemsCount > 0 && (
-                    <Badge className="absolute -right-2 -top-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs">
-                      {cartItemsCount}
-                    </Badge>
-                  )}
-                </Button>
-              </SheetTrigger>
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="outline" size="icon" className="relative bg-white/10 border-white/20 hover:bg-white/20 text-white">
+                    <Icon name="ShoppingCart" size={20} />
+                    {cartItemsCount > 0 && (
+                      <Badge className="absolute -right-2 -top-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs">
+                        {cartItemsCount}
+                      </Badge>
+                    )}
+                  </Button>
+                </SheetTrigger>
               <SheetContent className="w-full sm:max-w-lg">
                 <SheetHeader>
                   <SheetTitle className="flex items-center gap-2">
@@ -255,31 +252,25 @@ const Index = () => {
                 </div>
               </SheetContent>
             </Sheet>
-          </div>
-        </div>
-      </header>
+            </div>
+          </header>
 
-      <main>
-        {activeSection === 'home' && (
-          <section className="py-16 bg-gradient-to-b from-primary/5 to-background">
-            <div className="container mx-auto px-4">
-              <div className="max-w-3xl mx-auto text-center mb-12">
-                <h1 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">
+          <main className="flex-1 overflow-y-auto p-8">
+            {activeSection === 'home' && (
+              <div className="mb-8">
+                <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">
                   Электроника и гаджеты
                 </h1>
-                <p className="text-lg text-muted-foreground">
+                <p className="text-lg text-white/80">
                   Профессиональный подход к выбору техники. Подробные характеристики и честные цены.
                 </p>
               </div>
-            </div>
-          </section>
-        )}
+            )}
 
-        {(activeSection === 'home' || activeSection === 'catalog') && (
-          <section className="py-12">
-            <div className="container mx-auto px-4">
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
-                <h2 className="text-2xl font-bold text-foreground">Каталог товаров</h2>
+            {(activeSection === 'home' || activeSection === 'catalog') && (
+              <section>
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+                  <h2 className="text-2xl font-bold text-white">Каталог товаров</h2>
                 <div className="flex flex-wrap gap-2">
                   {categories.map((category) => (
                     <Button
@@ -287,7 +278,7 @@ const Index = () => {
                       variant={selectedCategory === category ? 'default' : 'outline'}
                       size="sm"
                       onClick={() => setSelectedCategory(category)}
-                      className="text-sm"
+                      className={selectedCategory === category ? 'bg-primary text-white' : 'bg-white/10 border-white/20 text-white hover:bg-white/20'}
                     >
                       {category}
                     </Button>
@@ -295,35 +286,35 @@ const Index = () => {
                 </div>
               </div>
               {filteredProducts.length === 0 ? (
-                <div className="text-center py-12 text-muted-foreground">
+                <div className="text-center py-12 text-white/60">
                   <Icon name="Search" size={48} className="mx-auto mb-4 opacity-50" />
                   <p>Товары не найдены</p>
                 </div>
               ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {filteredProducts.map((product) => (
-                  <Card key={product.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                    <div className="aspect-square bg-muted overflow-hidden">
+                  <Card key={product.id} className="overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all bg-white/10 backdrop-blur-[10px] border-white/10">
+                    <div className="aspect-square bg-white/5 overflow-hidden">
                       <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
                     </div>
                     <div className="p-5">
-                      <Badge variant="secondary" className="mb-3">
+                      <Badge variant="secondary" className="mb-3 bg-primary text-white">
                         {product.category}
                       </Badge>
-                      <h3 className="font-bold text-lg mb-3 text-foreground">{product.name}</h3>
+                      <h3 className="font-bold text-lg mb-3 text-white">{product.name}</h3>
                       <div className="space-y-2 mb-4 text-sm">
                         {product.specs.map((spec, index) => (
-                          <div key={index} className="flex justify-between text-muted-foreground">
+                          <div key={index} className="flex justify-between text-white/70">
                             <span className="font-medium">{spec.label}:</span>
                             <span>{spec.value}</span>
                           </div>
                         ))}
                       </div>
-                      <div className="flex items-center justify-between mt-4 pt-4 border-t">
-                        <span className="text-2xl font-bold text-primary">
+                      <div className="flex items-center justify-between mt-4 pt-4 border-t border-white/10">
+                        <span className="text-2xl font-bold text-white">
                           {product.price.toLocaleString('ru-RU')} ₽
                         </span>
-                        <Button onClick={() => addToCart(product)}>
+                        <Button onClick={() => addToCart(product)} className="bg-primary hover:bg-primary/90">
                           <Icon name="ShoppingCart" size={18} className="mr-2" />
                           В корзину
                         </Button>
@@ -333,15 +324,14 @@ const Index = () => {
                 ))}
               </div>
               )}
-            </div>
           </section>
         )}
 
         {activeSection === 'about' && (
-          <section className="py-16">
-            <div className="container mx-auto px-4 max-w-4xl">
-              <h2 className="text-3xl font-bold mb-6 text-foreground">О магазине</h2>
-              <div className="space-y-4 text-muted-foreground">
+          <section>
+            <div className="max-w-4xl">
+              <h2 className="text-3xl font-bold mb-6 text-white">О магазине</h2>
+              <div className="space-y-4 text-white/80">
                 <p className="text-lg">
                   TechStore — профессиональный интернет-магазин электроники и гаджетов. Мы специализируемся на
                   продаже качественной техники с предоставлением полных технических характеристик.
@@ -357,31 +347,31 @@ const Index = () => {
         )}
 
         {activeSection === 'delivery' && (
-          <section className="py-16">
-            <div className="container mx-auto px-4 max-w-4xl">
-              <h2 className="text-3xl font-bold mb-6 text-foreground">Доставка</h2>
+          <section>
+            <div className="max-w-4xl">
+              <h2 className="text-3xl font-bold mb-6 text-white">Доставка</h2>
               <div className="grid md:grid-cols-2 gap-6">
-                <Card className="p-6">
+                <Card className="p-6 bg-white/10 backdrop-blur border-white/10">
                   <div className="flex items-start gap-4">
-                    <div className="p-3 bg-primary/10 rounded-lg">
+                    <div className="p-3 bg-primary/20 rounded-lg">
                       <Icon name="Truck" size={24} className="text-primary" />
                     </div>
                     <div>
-                      <h3 className="font-bold mb-2">Курьерская доставка</h3>
-                      <p className="text-sm text-muted-foreground">По Москве — 500 ₽, 1-2 дня</p>
-                      <p className="text-sm text-muted-foreground">По России — от 800 ₽, 3-7 дней</p>
+                      <h3 className="font-bold mb-2 text-white">Курьерская доставка</h3>
+                      <p className="text-sm text-white/70">По Москве — 500 ₽, 1-2 дня</p>
+                      <p className="text-sm text-white/70">По России — от 800 ₽, 3-7 дней</p>
                     </div>
                   </div>
                 </Card>
-                <Card className="p-6">
+                <Card className="p-6 bg-white/10 backdrop-blur border-white/10">
                   <div className="flex items-start gap-4">
-                    <div className="p-3 bg-primary/10 rounded-lg">
+                    <div className="p-3 bg-primary/20 rounded-lg">
                       <Icon name="Store" size={24} className="text-primary" />
                     </div>
                     <div>
-                      <h3 className="font-bold mb-2">Самовывоз</h3>
-                      <p className="text-sm text-muted-foreground">Бесплатно из пунктов выдачи</p>
-                      <p className="text-sm text-muted-foreground">Готово к получению в день заказа</p>
+                      <h3 className="font-bold mb-2 text-white">Самовывоз</h3>
+                      <p className="text-sm text-white/70">Бесплатно из пунктов выдачи</p>
+                      <p className="text-sm text-white/70">Готово к получению в день заказа</p>
                     </div>
                   </div>
                 </Card>
@@ -391,43 +381,43 @@ const Index = () => {
         )}
 
         {activeSection === 'contacts' && (
-          <section className="py-16">
-            <div className="container mx-auto px-4 max-w-4xl">
-              <h2 className="text-3xl font-bold mb-6 text-foreground">Контакты</h2>
+          <section>
+            <div className="max-w-4xl">
+              <h2 className="text-3xl font-bold mb-6 text-white">Контакты</h2>
               <div className="space-y-6">
-                <Card className="p-6">
+                <Card className="p-6 bg-white/10 backdrop-blur border-white/10">
                   <div className="flex items-start gap-4">
-                    <div className="p-3 bg-primary/10 rounded-lg">
+                    <div className="p-3 bg-primary/20 rounded-lg">
                       <Icon name="Phone" size={24} className="text-primary" />
                     </div>
                     <div>
-                      <h3 className="font-bold mb-1">Телефон</h3>
-                      <p className="text-muted-foreground">+7 (495) 123-45-67</p>
-                      <p className="text-sm text-muted-foreground mt-1">Ежедневно с 9:00 до 21:00</p>
+                      <h3 className="font-bold mb-1 text-white">Телефон</h3>
+                      <p className="text-white/80">+7 (495) 123-45-67</p>
+                      <p className="text-sm text-white/70 mt-1">Ежедневно с 9:00 до 21:00</p>
                     </div>
                   </div>
                 </Card>
-                <Card className="p-6">
+                <Card className="p-6 bg-white/10 backdrop-blur border-white/10">
                   <div className="flex items-start gap-4">
-                    <div className="p-3 bg-primary/10 rounded-lg">
+                    <div className="p-3 bg-primary/20 rounded-lg">
                       <Icon name="Mail" size={24} className="text-primary" />
                     </div>
                     <div>
-                      <h3 className="font-bold mb-1">Email</h3>
-                      <p className="text-muted-foreground">support@techstore.ru</p>
-                      <p className="text-sm text-muted-foreground mt-1">Ответим в течение 24 часов</p>
+                      <h3 className="font-bold mb-1 text-white">Email</h3>
+                      <p className="text-white/80">support@techstore.ru</p>
+                      <p className="text-sm text-white/70 mt-1">Ответим в течение 24 часов</p>
                     </div>
                   </div>
                 </Card>
-                <Card className="p-6">
+                <Card className="p-6 bg-white/10 backdrop-blur border-white/10">
                   <div className="flex items-start gap-4">
-                    <div className="p-3 bg-primary/10 rounded-lg">
+                    <div className="p-3 bg-primary/20 rounded-lg">
                       <Icon name="MapPin" size={24} className="text-primary" />
                     </div>
                     <div>
-                      <h3 className="font-bold mb-1">Адрес</h3>
-                      <p className="text-muted-foreground">г. Москва, ул. Примерная, д. 1</p>
-                      <p className="text-sm text-muted-foreground mt-1">Пн-Пт: 10:00-19:00, Сб-Вс: 11:00-17:00</p>
+                      <h3 className="font-bold mb-1 text-white">Адрес</h3>
+                      <p className="text-white/80">г. Москва, ул. Примерная, д. 1</p>
+                      <p className="text-sm text-white/70 mt-1">Пн-Пт: 10:00-19:00, Сб-Вс: 11:00-17:00</p>
                     </div>
                   </div>
                 </Card>
@@ -435,19 +425,9 @@ const Index = () => {
             </div>
           </section>
         )}
-      </main>
-
-      <footer className="mt-16 border-t bg-card">
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex items-center gap-2">
-              <Icon name="Laptop" size={24} className="text-primary" />
-              <span className="font-bold text-foreground">TechStore</span>
-            </div>
-            <p className="text-sm text-muted-foreground">© 2024 TechStore. Все права защищены.</p>
-          </div>
+          </main>
         </div>
-      </footer>
+      </div>
     </div>
   );
 };
