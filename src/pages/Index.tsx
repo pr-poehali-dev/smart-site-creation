@@ -145,6 +145,7 @@ const Index = () => {
   const menuItems = [
     { id: 'home', label: 'Главная', icon: 'Home' },
     { id: 'catalog', label: 'Каталог', icon: 'Grid3x3' },
+    { id: 'profile', label: 'Профиль', icon: 'User', badge: cart.length },
     { id: 'about', label: 'О магазине', icon: 'Info' },
     { id: 'delivery', label: 'Доставка', icon: 'Truck' },
     { id: 'contacts', label: 'Контакты', icon: 'Mail' },
@@ -422,6 +423,127 @@ const Index = () => {
                   </div>
                 </Card>
               </div>
+            </div>
+          </section>
+        )}
+
+        {activeSection === 'profile' && (
+          <section>
+            <div className="max-w-4xl">
+              <h2 className="text-3xl font-bold mb-8 text-white">Профиль пользователя</h2>
+              
+              <div className="grid md:grid-cols-2 gap-6 mb-8">
+                <Card className="p-6 bg-white/10 backdrop-blur border-white/10">
+                  <div className="flex items-start gap-4">
+                    <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-primary">
+                      <img 
+                        src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&q=80" 
+                        alt="Avatar" 
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-xl font-bold text-white mb-1">TechStore Admin</h3>
+                      <p className="text-white/70 text-sm mb-3">admin@techstore.ru</p>
+                      <Button size="sm" variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20">
+                        <Icon name="Edit" size={16} className="mr-2" />
+                        Редактировать
+                      </Button>
+                    </div>
+                  </div>
+                </Card>
+
+                <Card className="p-6 bg-white/10 backdrop-blur border-white/10">
+                  <h3 className="font-bold text-white mb-4 flex items-center gap-2">
+                    <Icon name="ShoppingBag" size={20} className="text-primary" />
+                    Статистика покупок
+                  </h3>
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <span className="text-white/70">Всего заказов:</span>
+                      <span className="font-bold text-white">12</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-white/70">Потрачено:</span>
+                      <span className="font-bold text-white">458 990 ₽</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-white/70">Бонусов:</span>
+                      <span className="font-bold text-primary">4 589 ₽</span>
+                    </div>
+                  </div>
+                </Card>
+              </div>
+
+              <Card className="p-6 bg-white/10 backdrop-blur border-white/10 mb-6">
+                <h3 className="font-bold text-white mb-4 flex items-center gap-2">
+                  <Icon name="Settings" size={20} className="text-primary" />
+                  Настройки профиля
+                </h3>
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-white/70 text-sm mb-2 block">Имя</label>
+                    <input 
+                      type="text" 
+                      defaultValue="TechStore Admin"
+                      className="w-full px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/50 focus:outline-none focus:border-primary"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-white/70 text-sm mb-2 block">Email</label>
+                    <input 
+                      type="email" 
+                      defaultValue="admin@techstore.ru"
+                      className="w-full px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/50 focus:outline-none focus:border-primary"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-white/70 text-sm mb-2 block">Телефон</label>
+                    <input 
+                      type="tel" 
+                      defaultValue="+7 (495) 123-45-67"
+                      className="w-full px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/50 focus:outline-none focus:border-primary"
+                    />
+                  </div>
+                  <Button className="bg-primary hover:bg-primary/90">
+                    <Icon name="Save" size={18} className="mr-2" />
+                    Сохранить изменения
+                  </Button>
+                </div>
+              </Card>
+
+              <Card className="p-6 bg-white/10 backdrop-blur border-white/10">
+                <h3 className="font-bold text-white mb-4 flex items-center gap-2">
+                  <Icon name="PackageCheck" size={20} className="text-primary" />
+                  История заказов
+                </h3>
+                <div className="space-y-3">
+                  {[
+                    { id: 1, date: '15.10.2024', items: 'Смартфон Premium X1, Наушники AirWave Pro', total: 114980, status: 'Доставлен' },
+                    { id: 2, date: '10.10.2024', items: 'Ноутбук ProBook 15', total: 124990, status: 'Доставлен' },
+                    { id: 3, date: '05.10.2024', items: 'Планшет TabMax 12, Умные часы FitWatch Pro', total: 94980, status: 'В пути' },
+                  ].map((order) => (
+                    <Card key={order.id} className="p-4 bg-white/5 border-white/5">
+                      <div className="flex justify-between items-start mb-2">
+                        <div>
+                          <p className="text-white/70 text-sm">Заказ #{order.id} от {order.date}</p>
+                          <p className="text-white text-sm mt-1">{order.items}</p>
+                        </div>
+                        <Badge className={order.status === 'Доставлен' ? 'bg-green-500' : 'bg-blue-500'}>
+                          {order.status}
+                        </Badge>
+                      </div>
+                      <div className="flex justify-between items-center mt-3 pt-3 border-t border-white/10">
+                        <span className="text-white font-bold">{order.total.toLocaleString('ru-RU')} ₽</span>
+                        <Button size="sm" variant="ghost" className="text-white hover:bg-white/10">
+                          <Icon name="Eye" size={16} className="mr-2" />
+                          Подробнее
+                        </Button>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              </Card>
             </div>
           </section>
         )}
